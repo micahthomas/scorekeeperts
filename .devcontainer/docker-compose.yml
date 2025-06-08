@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    volumes:
+      - ../..:/workspaces:cached
+
+    command: sleep infinity
+    network_mode: service:db
+
+  db:
+    build:
+      context: ../docker/db
+      dockerfile: Dockerfile
+
+    container_name: db
+    ports:
+      - '127.0.0.1:6432:6432'
+      - '127.0.0.1:6666:6666'
+
+    volumes:
+      - database:/var/lib/postgresql/data
+      - certs:/certs
+
+    stop_grace_period: 2s
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      TZ: America/Los_Angeles
+
+volumes:
+  database:
+  certs:
