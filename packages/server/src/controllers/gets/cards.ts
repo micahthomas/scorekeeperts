@@ -27,19 +27,10 @@ interface RegData
 }
 
 
-let chromeargs: puppeteer.LaunchOptions
-if (process.platform === 'win32') {
-    // Running dev in Windows
-    chromeargs = {
-        executablePath: 'c:/chromium/chrome.exe'
-    }
-} else {
-    // running shell in container
-    chromeargs = {
-        executablePath: '/headless-shell/headless-shell',
-        headless: false,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    }
+const chromeargs: puppeteer.LaunchOptions = {
+    executablePath: process.platform === 'win32'
+        ? 'c:/chromium/chrome.exe'
+        : '/headless-shell/headless-shell'
 }
 
 
